@@ -5,11 +5,13 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/cache-demp/pom.xml" />
+        <option value="$PROJECT_DIR$/other/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/cache-demp/pom.xml" />
+        <option value="$PROJECT_DIR$/other/pom.xml" />
       </set>
     </option>
   </component>
