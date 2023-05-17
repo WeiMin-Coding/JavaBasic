@@ -6,11 +6,13 @@
       <list>
         <option value="$PROJECT_DIR$/cache-demp/pom.xml" />
         <option value="$PROJECT_DIR$/other/pom.xml" />
+        <option value="$PROJECT_DIR$/chapter-8-oop-2/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/cache-demp/pom.xml" />
+        <option value="$PROJECT_DIR$/chapter-8-oop-2/pom.xml" />
         <option value="$PROJECT_DIR$/other/pom.xml" />
       </set>
     </option>

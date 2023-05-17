@@ -10,6 +10,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cache-demp" target="1.8" />
+      <module name="chapter-8-oop-2" target="1.8" />
       <module name="other" target="1.8" />
     </bytecodeTargetLevel>
   </component>
