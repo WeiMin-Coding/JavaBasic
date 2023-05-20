@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Scanner;
 
-public class SmallChangeSys {
+public class SmallChangeSysOOP {
     // 当前余额
     private double currentChange;
     // 零钱明细
@@ -77,12 +77,13 @@ public class SmallChangeSys {
         record[2] = getNowTime();
         if (type == 1) {
             record[0] = "收益入账";
-            record[1] = String.format("+%f", amount);
-            record[3] = String.format("余额:%f", balance);
+            record[1] = String.format("+%.2f", amount);
+            record[3] = String.format("余额:%.2f", balance);
+            System.out.println(record[3]);
         } else if (type == 2) {
             record[0] = "消费";
-            record[1] = String.format("-%f", amount);
-            record[3] = String.format("余额:%f", balance);
+            record[1] = String.format("-%.2f", amount);
+            record[3] = String.format("余额:%.2f", balance);
         }
 
         this.addArr();
@@ -102,7 +103,7 @@ public class SmallChangeSys {
         }
 
         for (int i = 0; i < this.changeHistory.length; i++) {
-             temp[i] = this.changeHistory[i];
+            temp[i] = this.changeHistory[i];
         }
 
         this.changeHistory = temp;
@@ -110,7 +111,7 @@ public class SmallChangeSys {
 
     private String getNowTime() {
         SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-        sdf.applyPattern("yyyy-MM-dd HH:mm:ss a");// a为am/pm的标记
+        sdf.applyPattern("yyyy-MM-dd HH:mm:ss");// a为am/pm的标记
         Date date = new Date();// 获取当前时间
         return sdf.format(date);
     }
@@ -123,6 +124,21 @@ public class SmallChangeSys {
         System.out.println("\t4 退出");
         System.out.print("请选择(1-4): ");
         return new Scanner(System.in).nextInt();
+    }
+
+    private boolean exit() {
+        while (true) {
+            System.out.print("你确定要退出吗？y/n");
+            String input = new Scanner(System.in).nextLine();
+
+            if (input.equals("y") || input.equals("n")) {
+                if (input.equals("y")) {
+                    System.exit(0);
+                } else {
+                    return false;
+                }
+            }
+        }
     }
 
     public void start() {
@@ -142,11 +158,10 @@ public class SmallChangeSys {
                     this.crediting();
                     break;
                 case 3:
-
                     this.consumption();
                     break;
                 case 4:
-                    return;
+                    if (this.exit()) break;
                 default:
                     System.out.println("输入错误，请重新输入！");
                     break;
@@ -155,7 +170,7 @@ public class SmallChangeSys {
     }
 
     public static void main(String[] args) {
-        SmallChangeSys smallChangeSys = new SmallChangeSys();
+        SmallChangeSysOOP smallChangeSys = new SmallChangeSysOOP();
         smallChangeSys.start();
     }
 }
