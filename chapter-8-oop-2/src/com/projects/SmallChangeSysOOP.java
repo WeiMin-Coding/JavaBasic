@@ -8,7 +8,8 @@ public class SmallChangeSysOOP {
     // 当前余额
     private double currentChange;
     // 零钱明细
-    private String[][] changeHistory = new String[0][];
+    private Record record;
+    private Object[] changeHistory = new Object[0];
 
     /**
      * 零钱通明细
@@ -18,12 +19,7 @@ public class SmallChangeSysOOP {
 
         if (this.changeHistory.length == 0) return;
         for (int i = 0; i < this.changeHistory.length; i++) {
-            String details = String.format("%s\t%s\t%s\t%s",
-                    this.changeHistory[i][0],
-                    this.changeHistory[i][1],
-                    this.changeHistory[i][2],
-                    this.changeHistory[i][3]);
-            System.out.println(details);
+            System.out.println(this.changeHistory[i]);
         }
     }
 
@@ -44,6 +40,7 @@ public class SmallChangeSysOOP {
 
     /**
      * 消费
+     *
      * @param
      * @return
      */
@@ -51,11 +48,11 @@ public class SmallChangeSysOOP {
         System.out.print("请消费金额: ");
         double amount = new Scanner(System.in).nextDouble();
 
-        if (amount <= 0) return false;
+        if (amount <= 0 || amount > this.currentChange) return false;
         boolean recordResult = true;
         this.currentChange -= amount;
 
-        if (this.currentChange <= 0) {
+        if (this.currentChange < 0) {
             System.out.println("很抱歉，余额为0!");
             return false;
         }
@@ -73,20 +70,13 @@ public class SmallChangeSysOOP {
      * @return
      */
     private boolean consumptionRecords(int type, double amount, double balance) {
-        String[] record = new String[4];
-        record[2] = getNowTime();
         if (type == 1) {
-            record[0] = "收益入账";
-            record[1] = String.format("+%.2f", amount);
-            record[3] = String.format("余额:%.2f", balance);
-            System.out.println(record[3]);
+            this.record = new Record("收益入账", String.format("+%.2f", amount), String.format("余额:%.2f", balance));
         } else if (type == 2) {
-            record[0] = "消费";
-            record[1] = String.format("-%.2f", amount);
-            record[3] = String.format("余额:%.2f", balance);
+            this.record = new Record("消费  ", String.format("+%.2f", amount), String.format("余额:%.2f", balance));
         }
 
-        this.addArr();
+        this.addArr(record);
         this.changeHistory[this.changeHistory.length - 1] = record;
 
         return true;
@@ -95,8 +85,8 @@ public class SmallChangeSysOOP {
     /**
      * 扩容
      */
-    private void addArr() {
-        String[][] temp = new String[this.changeHistory.length + 1][];
+    private void addArr(Record record) {
+        Object[] temp = new Object[this.changeHistory.length + 1];
         if (this.changeHistory.length == 0) {
             this.changeHistory = temp;
             return;
@@ -109,26 +99,36 @@ public class SmallChangeSysOOP {
         this.changeHistory = temp;
     }
 
-    private String getNowTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
-        sdf.applyPattern("yyyy-MM-dd HH:mm:ss");// a为am/pm的标记
-        Date date = new Date();// 获取当前时间
-        return sdf.format(date);
-    }
-
-    private int display() throws Exception {
+    /**
+     * 显示方法
+     *
+     * @return
+     * @throws Exception
+     */
+    private int display() {
+        int choice = 5;
         System.out.println("------------零钱通菜单------------");
         System.out.println("\t1 零钱通明细");
         System.out.println("\t2 收益入账");
         System.out.println("\t3 消费");
         System.out.println("\t4 退出");
         System.out.print("请选择(1-4): ");
-        return new Scanner(System.in).nextInt();
+        try {
+            choice = new Scanner(System.in).nextInt();
+        } catch (Exception e) {
+            return choice;
+        }
+        return choice;
     }
 
+    /**
+     * 退出方法
+     *
+     * @return
+     */
     private boolean exit() {
         while (true) {
-            System.out.print("你确定要退出吗？y/n");
+            System.out.print("你确定要退出吗？y/n ");
             String input = new Scanner(System.in).nextLine();
 
             if (input.equals("y") || input.equals("n")) {
@@ -142,14 +142,9 @@ public class SmallChangeSysOOP {
     }
 
     public void start() {
+        int choice;
         while (true) {
-            int choice = 0;
-            try {
-                choice = display();
-            } catch (Exception e) {
-                System.out.println("输入错误，请重新输入！");
-                continue;
-            }
+            choice = display();
             switch (choice) {
                 case 1:
                     this.coneyDetails();
@@ -161,16 +156,42 @@ public class SmallChangeSysOOP {
                     this.consumption();
                     break;
                 case 4:
-                    if (this.exit()) break;
+                    this.exit();
+                    break;
                 default:
                     System.out.println("输入错误，请重新输入！");
                     break;
             }
         }
     }
+}
 
-    public static void main(String[] args) {
-        SmallChangeSysOOP smallChangeSys = new SmallChangeSysOOP();
-        smallChangeSys.start();
+class Record {
+    // 记录类型
+    private String type;
+    // 记录金额
+    private String amount;
+    // 记录日期
+    private String date;
+    // 记录剩余金额
+    private String amountLeft;
+
+    public Record(String type, String amount, String amountLeft) {
+        this.type = type;
+        this.amount = amount;
+        this.amountLeft = amountLeft;
+        this.date = this.getNowTime();
+    }
+
+    @Override
+    public String toString() {
+        return type + "\t" + amount + "\t" + date + "\t" + amountLeft;
+    }
+
+    private String getNowTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat();// 格式化时间
+        sdf.applyPattern("yyyy-MM-dd HH:mm:ss");// a为am/pm的标记
+        Date date = new Date();// 获取当前时间
+        return sdf.format(date);
     }
 }
